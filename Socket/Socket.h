@@ -22,7 +22,6 @@ namespace ix
 			int recv(char* buf, int len);
 			void close();
 
-			
 			bool set_non_blocking();
 			bool set_send_buffer(int size);
 			bool set_recv_buffer(int size);
@@ -33,7 +32,6 @@ namespace ix
 			SOCKET m_socket;
 			std::string m_ip;
 			int m_port;
-
 		};
 	}
 }

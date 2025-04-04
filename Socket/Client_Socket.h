@@ -5,10 +5,12 @@ namespace ix {
     class Client_Socket :
     public Socket
     {
+        bool isConnected;
     public:
         Client_Socket() = delete;
         Client_Socket(const std::string& ip,int port);
-        ~Client_Socket() = delete;
+        bool GetConnectStatus();
+        ~Client_Socket() = default;
     };
 }
 }

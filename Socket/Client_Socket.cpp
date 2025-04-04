@@ -8,6 +8,10 @@ Client_Socket::Client_Socket(const std::string& ip, int port)
 	set_linger(true, 0);
 	set_keepalive();
 	set_reuseAddr();
-	bind(ip, port);
-	listen(1024);
+	isConnected = connect(ip,port);
+}
+
+bool ix::socket::Client_Socket::GetConnectStatus()
+{
+	return isConnected;
 }

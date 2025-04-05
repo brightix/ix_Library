@@ -45,7 +45,7 @@ private:
 	std::ofstream m_fout;
 	Level m_level;
 	int m_len;
-	int m_SetMaxSize;
+	int m_maxSize;
 	static const char* s_level[LEVEL_COUNT];
 };
 }

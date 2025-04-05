@@ -60,7 +60,7 @@ void ix::utility::Logger::Log(Level level, const char* file, int line, const cha
 
 	m_fout << "\n";
 	m_fout.flush();
-	if (m_len > m_SetMaxSize) {
+	if (m_len > m_maxSize) {
 		Rotate();
 	}
 }
@@ -88,7 +88,7 @@ void Logger::SetLevel(Level level)
 
 void ix::utility::Logger::SetMaxSize(int val)
 {
-	m_SetMaxSize = val;
+	m_maxSize = val;
 }
 
 void ix::utility::Logger::Rotate()
@@ -127,7 +127,7 @@ string ix::utility::Logger::PrintErrno(int err)
 	return string(errMsg);
 }
 
-Logger::Logger() : m_level(Level::DEBUG),m_len(0),m_SetMaxSize(0){
+Logger::Logger() : m_level(Level::DEBUG),m_len(0),m_maxSize(2048){
 
 }
 

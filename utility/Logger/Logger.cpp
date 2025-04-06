@@ -1,12 +1,14 @@
-#include "logger.h"
+#include "Logger.h"
 #include<fstream>
 
-#include <time.h>
-#include <string.h>
+#include <ctime>
+#include <cstring>
 #include <stdexcept>
 #include <iostream>
 #include <format>
 #include <cstdarg>
+#include <filesystem>
+
 using namespace ix::utility;
 using namespace std;
 const char* Logger::s_level[LEVEL_COUNT] = {
@@ -22,24 +24,28 @@ void ix::utility::Logger::Log(Level level, const char* file, int line, const cha
 	if (m_level > level) {
 		return;
 	}
-	/* ´ò¿ªÊ§°ÜÊ±±¨´í */
+
 	if (m_fout.fail()) {
 		throw logic_error("Open file failed " + m_filename);
 	}
-	/* »ñÈ¡µ±Ç°Ê±¼ä´Á */
+
 	time_t ticks = time(NULL);
-	struct tm ptm;
-	/* ×ª»»ÎªÊ±¼ä½á¹¹ */
-	errno_t err = localtime_s(&ptm,&ticks);
-	if (err) {
-		char errMsg[256]{};
-		strerror_s(errMsg,sizeof(errMsg),err);
-		printf("Log Error,errno=%d,msg=%s", err, errMsg);
+
+	if(ticks == (time_t)-1){
+		PrintErrno("Failed to get time");
+	}
+
+	struct tm* ptm = localtime(&ticks);
+	if (ptm == nullptr) {
+		PrintErrno("Log Error");
 		return;
 	}
-	/* ¸ñÊ½»¯Ê±¼ä */
 	char timestamp[32];
-	strftime(timestamp,sizeof(timestamp),"%Y-%m-%d %H:%M:%S",&ptm);
+	strftime(timestamp,sizeof(timestamp),"%Y-%m-%d %H:%M:%S",ptm);
+
+	// ç®€åŒ–æ–‡ä»¶è·¯å¾„
+	file = filesystem::path(file).filename().c_str();
+
 	string buffer;
 	buffer = std::format("{} [{}] {}:{}  ", timestamp, s_level[level], file, line);
 	m_len += static_cast<int>(buffer.size());
@@ -56,8 +62,13 @@ void ix::utility::Logger::Log(Level level, const char* file, int line, const cha
 		va_end(arg_ptr);
 		m_len += size;
 		m_fout << content;
-	}
 
+		// å¦‚æžœå¯ç”¨äº†æ‰“å°æ—¥å¿—åˆ°æŽ§åˆ¶å°
+		if (printOnConsole)
+		{
+			cout << buffer << content << endl;
+		}
+	}
 	m_fout << "\n";
 	m_fout.flush();
 	if (m_len > m_maxSize) {
@@ -95,39 +106,43 @@ void ix::utility::Logger::Rotate()
 {
 	Close();
 	time_t ticks = time(NULL);
-	struct tm ptm;
-	/* ×ª»»ÎªÊ±¼ä½á¹¹ */
-	errno_t err = localtime_s(&ptm, &ticks);
-	if (err) {
-		char errMsg[256]{};
-		strerror_s(errMsg, sizeof(errMsg), err);
-		printf("Log Error,errno=%d,msg=%s", err, errMsg);
+    if(ticks == static_cast<time_t>(-1)){
+        PrintErrno("Failed to get time");
+    }
+
+	struct tm* ptm = localtime(&ticks);
+	if (ptm == nullptr) {
+       	PrintErrno("Log Error");
 		return;
 	}
-	/* ¸ñÊ½»¯Ê±¼ä */
+
 	char timestamp[32];
 
-	strftime(timestamp, sizeof(timestamp), ".%Y_%m_%d_%H_%M_%S", &ptm);
+	strftime(timestamp, sizeof(timestamp), ".%Y_%m_%d_%H_%M_%S", ptm);
 	size_t dotPos = m_filename.find_last_of('.');
 	string base = m_filename.substr(0,dotPos);
 	string ext = m_filename.substr(dotPos,m_filename.size());
 	string filename = base + timestamp + ext;
 	if (rename(m_filename.c_str(),filename.c_str()) != 0) {
-		char buffer[256]{};
-		strerror_s(buffer, sizeof(buffer), errno);
-		throw std::logic_error("rename log file failed: "+ std::string(buffer));
+		throw std::logic_error("rename log file failed: " + string(strerror(errno)));
 	}
 	Open(m_filename);
 }
 
-string ix::utility::Logger::PrintErrno(int err)
+string Logger::PrintErrno(string_view errorName)
 {
-	char errMsg[256]{};
-	strerror_s(errMsg, sizeof(errMsg),err);
-	return string(errMsg);
+	return string(errorName) + ", errno: " + to_string(errno) +  ",errMsg: " + strerror(errno);
 }
 
-Logger::Logger() : m_level(Level::DEBUG),m_len(0),m_maxSize(2048){
+void Logger::print_log_on_console()
+{
+	printOnConsole = true;
+}
+
+
+
+
+Logger::Logger() : m_level(Level::DEBUG),m_len(0),m_maxSize(4096){
 
 }
 

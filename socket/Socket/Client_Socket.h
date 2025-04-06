@@ -9,6 +9,7 @@ namespace ix {
     public:
         Client_Socket() = delete;
         Client_Socket(const std::string& ip,int port);
+        explicit Client_Socket(int file_describe);
         bool GetConnectStatus();
         ~Client_Socket() = default;
     };

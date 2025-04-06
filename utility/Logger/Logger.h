@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
-#include <iostream>
 #include <fstream>
+#include <cstring>
+
 
 #define debug(format,...) \
 	ix::utility::Logger::Instance().Log(ix::utility::Logger::Level::DEBUG,__FILE__,__LINE__,format,##__VA_ARGS__)
@@ -35,7 +36,9 @@ public:
 	void SetLevel(Level level);
 	void SetMaxSize(int val);
 	void Rotate();
-	std::string PrintErrno(int err);
+
+	std::string PrintErrno(std::string_view errorName);
+	void print_log_on_console();
 	Logger(Logger&) = delete;
 	Logger& operator=(Logger&) = delete;
 private:
@@ -46,7 +49,10 @@ private:
 	Level m_level;
 	int m_len;
 	int m_maxSize;
+
 	static const char* s_level[LEVEL_COUNT];
+
+	bool printOnConsole = false;
 };
 }
 }

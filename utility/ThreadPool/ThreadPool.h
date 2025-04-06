@@ -15,13 +15,12 @@ class ThreadPool
 public:
 	explicit ThreadPool(size_t thread_count);
 	~ThreadPool();
-
+    // æ¨¡æ¿æ³¨å†Œä»»åŠ¡
     template<class F, class... Args>
     std::future<std::any> submit(F&& f, Args&&... args)
     {
         using return_type = std::invoke_result_t<F, Args...>;
 
-        // 1. °Ñ f+args °ó¶¨³ÉÒ»¸ö copyable µÄ std::function<return_type()>
         auto bound = std::bind(std::forward<F>(f), std::forward<Args>(args)...);
         std::function<return_type()> func = std::move(bound);
 
@@ -31,9 +30,9 @@ public:
 
         {
             std::lock_guard<std::mutex> lock(queue_mutex);
-            if (stop.load()) throw std::runtime_error("ThreadPool ÒÑÍ£Ö¹");
+            if (stop.load()) throw std::runtime_error("ThreadPool err");
 
-            // 3. lambda Ö»²¶»ñ func£¨copyable£©ºÍ promiseAny£¨shared_ptr Ò²ÊÇ copyable£©
+            // å°†äººç‰©å‹è‡³ä»»åŠ¡é˜Ÿåˆ—
             tasks.emplace([func, promiseAny]() mutable {
                 try {
                     if constexpr (std::is_void_v<return_type>) {
@@ -50,7 +49,7 @@ public:
                 });
         }
         condition.notify_one();
-        return futureAny;  // Á¢¼´·µ»Ø£¬²»×èÈû
+        return futureAny;
     }
 
 private:

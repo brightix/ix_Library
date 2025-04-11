@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include <fstream>
-#include <cstring>
+
+
+//#define DEBUG_MODE
 
 
 #define debug(format,...) \
@@ -14,6 +16,9 @@
 	ix::utility::Logger::Instance().Log(ix::utility::Logger::Level::ERR,__FILE__,__LINE__,format,##__VA_ARGS__)
 #define fatal(format,...) \
 	ix::utility::Logger::Instance().Log(ix::utility::Logger::Level::FATAL,__FILE__,__LINE__,format,##__VA_ARGS__)
+#define PRINT_ERRNO(DESCRIBE) \
+ix::utility::Logger::Instance().PrintErrno(DESCRIBE)
+
 
 namespace ix {
 namespace utility {

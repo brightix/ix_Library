@@ -129,7 +129,8 @@ void ix::utility::Logger::Rotate()
 	Open(m_filename);
 }
 
-string Logger::PrintErrno(string_view errorName)
+string Logger::
+PrintErrno(string_view errorName)
 {
 	return string(errorName) + ", errno: " + to_string(errno) +  ",errMsg: " + strerror(errno);
 }

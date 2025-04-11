@@ -10,13 +10,14 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <thread>
 #include <sys/epoll.h>
 
 using namespace ix::socket;
 
 using namespace std;
 
-Socket::Socket() : m_ip(""), m_port(0), m_socket(-1)
+Socket::Socket() : m_port(0), m_socket(-1)
 {
 	m_socket = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (m_socket == -1) {
@@ -72,7 +73,9 @@ bool Socket::connect(const std::string& ip, const int port)
 		error("IP transform failed");
 		return false;
 	}
-	if (::connect(m_socket, (struct sockaddr*)&sockaddr, sizeof(sockaddr)) == -1) {
+	int connectStatus = ::connect(m_socket, (struct sockaddr*)&sockaddr, sizeof(sockaddr));
+	this_thread::sleep_for(chrono::seconds(1));
+	if (connectStatus == -1) {
 		error(ix::utility::Logger::Instance().PrintErrno("socket connect").c_str());
 		return false;
 	}
@@ -97,11 +100,12 @@ int Socket::send(const char* buf, size_t len)
 	return ::send(m_socket, buf, len, MSG_NOSIGNAL);
 }
 
-int ix::socket::Socket::recv(char* buf, size_t len)
+ssize_t ix::socket::Socket::recv(char* buf, size_t len)
 {
-	int ret = ::recv(m_socket, buf, len, 0);
-	if (ret == -1) {
-		//error(ix::utility::Logger::Instance().PrintErrno("recv").c_str());
+	ssize_t ret = ::recv(m_socket, buf, len, 0);
+	if (ret == -1)
+	{
+		error(ix::utility::Logger::Instance().PrintErrno("recv").c_str());
 	}
 	return ret;
 }

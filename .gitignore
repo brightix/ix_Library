@@ -1,0 +1,48 @@
+# 🧠 忽略编译中间产物
+*.o
+*.obj
+*.so
+*.a
+*.out
+*.exe
+*.dll
+
+# 🧱 CMake 构建目录（CLion 默认是 cmake-build-*）
+cmake-build-*/
+
+# 🍿 CLion 配置文件（可选忽略）
+.idea/
+*.iml
+
+# 📦 Boost 构建缓存（如果你自己 build boost）
+boost/bin.v2/
+boost/stage/
+boost/libs/*/build/
+boost/tools/*/build/
+
+# 🧹 通用缓存文件
+*.log
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# 🧩 CTest / GoogleTest 临时文件
+Testing/
+CTestTestfile.cmake
+Makefile
+cmake_install.cmake
+
+# 🗃️ 自动生成的数据库文件（比如 SQLite）
+*.db
+*.sqlite
+
+# 🔐 隐私配置
+*.env
+.env.*
+.vscode/
+
+# 🐧 Linux 编译文件夹
+build/
+token.txt

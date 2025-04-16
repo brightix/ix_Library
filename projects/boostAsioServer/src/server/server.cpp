@@ -1,10 +1,11 @@
 #include <iostream>
-
-#include "server.h"
-
 #include <boost/filesystem.hpp>
 #include <nlohmann/json.hpp>
 #include <nlohmann/json_fwd.hpp>
+
+#include "server.h"
+#include "../utility/SqlConnectionPool/SqlConnectionPool.h"
+
 using namespace boost::asio;
 using namespace std;
 namespace ix::m_boost::Server {
@@ -14,6 +15,7 @@ namespace fs = boost::filesystem;
 Server::Server() : tcp_service(),dispatcher(make_unique<dispatcher::ServerDispatcher>(this))
 {
     load_user_table();
+    init_sql();
 }
 
 void Server::register_server(string ip, int port)
@@ -95,9 +97,15 @@ void Server::run()
 
 optional<string> Server::verifyUserInfo(string username, string password)
 {
-    if (local_user_table.count(username) > 0 && local_user_table[username].password == password)
+    cout << "验证用户" << endl;
+    utility::SqlConnRALL conn_rall(ix::utility::SqlConnectionPool::Instance());
+    unique_ptr<sql::ResultSet> res = conn_rall.query("Select username , password ,nickname from local_user_info");
+    while (res->next())
     {
-        return local_user_table[username].nickname;
+        if (res->getString("username") == username && res->getString("password") == password)
+        {
+            return res->getString("nickname");
+        }
     }
     return nullopt;
 }
@@ -139,7 +147,7 @@ void Server::transmitMessage(nlohmann::json&& j,shared_ptr<vector<char>> context
     cout << agreement.MessageId << " 包已发送至缓冲区" << endl;
 }
 
-// void Server::registered_user(std::string nickname, int id, std::string username, std::string password)
+// void Server::registered_user(const std::string& nickname,const std::string& username, const std::string& password)
 // {
 //     sessions.emplace(nickname,make_shared<session::Session>());
 // }
@@ -203,4 +211,15 @@ optional<string> Server::get_user_nickname(string username)
     return local_user_table[username].nickname;
 }
 
+void Server::init_sql()
+{
+    try{
+        sql_driver = sql::mysql::get_driver_instance();
+        sql_conn = unique_ptr<sql::Connection>(sql_driver->connect("tcp://127.0.0.1:3306","root","123"));
+        sql_conn->setSchema("my_database");
+    }catch (const exception& e)
+    {
+        cout << "数据库初始化失败 ：" << e.what() << endl;
+    }
+}
 }

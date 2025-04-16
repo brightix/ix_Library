@@ -1,16 +1,17 @@
 #pragma once
 
-#include <nlohmann/json_fwd.hpp>
-#include <nlohmann/json_fwd.hpp>
-
+#include <nlohmann/json.hpp>
+#include <mysql/jdbc.h>
 #include "../Dispatcher/ServerDispatcher.h"
 #include "../tcp_service/tcp_service.h"
 namespace ix::m_boost::Server {
-
 class Server : public m_boost::Service::tcp_service{
 
     std::unique_ptr<dispatcher::ServerDispatcher> dispatcher;
     std::unordered_map<std::string,session::userInfo> local_user_table;
+
+    sql::mysql::MySQL_Driver* sql_driver;
+    std::unique_ptr<sql::Connection> sql_conn;
 public:
     Server();
 
@@ -24,7 +25,7 @@ public:
     void run() final;
 
     //注册用户
-    void registered_user(std::string nickname,int id,std::string username,std::string password);
+    void registered_user(const std::string& nickname,int id,std::string username,std::string password);
 
     void load_user_table();
 
@@ -36,6 +37,7 @@ public:
 
     std::optional<std::string> get_user_nickname(std::string username);
 
+    void init_sql();
     //检查登录信息
     std::optional<std::string> verifyUserInfo(std::string userName, std::string password);
 //转发讯息

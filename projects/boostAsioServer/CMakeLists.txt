@@ -11,6 +11,11 @@ file(GLOB SOURCE
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 
+
+include_directories(/home/ix/mysql-connector-c++-9.3.0-linux-glibc2.28-x86-64bit/include)
+link_directories(/home/ix/mysql-connector-c++-9.3.0-linux-glibc2.28-x86-64bit/lib64)
+
+
 add_executable(Client
         Client.cpp
 
@@ -27,6 +32,7 @@ add_executable(Server ${SOURCE}
         src/server/server.cpp
         src/Dispatcher/ServerDispatcher.cpp
         src/utility/JsonInterpreter/JsonInterpreter.cpp
+        src/utility/SqlConnectionPool/SqlConnectionPool.cpp
+        src/utility/SqlConnectionPool/SqlConnectionPool.h
 )
-target_link_libraries(Server PRIVATE Boost::filesystem Boost::system)
-
+target_link_libraries(Server PRIVATE Boost::filesystem Boost::system mysqlcppconn)

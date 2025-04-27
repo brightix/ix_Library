@@ -4,7 +4,7 @@
 
 
 namespace ix::m_boost::Client {
-class Client;  // ✅ 前向声明
+class Client;
 }
 
 namespace ix::dispatcher {

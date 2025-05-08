@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icon/223保存.png</file>
+        <file>icon/223保存(1).png</file>
+        <file>icon/223保存(2).png</file>
+        <file>icon/关闭.png</file>
+        <file>icon/关闭(1).png</file>
+        <file>icon/关闭(2).png</file>
+        <file>icon/bg-open-folder.png</file>
+        <file>icon/bg-open-folder (3).png</file>
+        <file>icon/bg-open-folder(1).png</file>
+        <file>icon/girl1.png</file>
+        <file>icon/girl1_head.png</file>
+    </qresource>
+</RCC>

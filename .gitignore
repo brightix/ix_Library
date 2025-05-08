@@ -42,6 +42,9 @@ cmake_install.cmake
 *.env
 .env.*
 .vscode/
+# 图片
+*.png
+*.jpg
 
 # 🐧 Linux 编译文件夹
 build/

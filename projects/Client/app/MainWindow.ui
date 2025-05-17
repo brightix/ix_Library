@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>715</width>
+    <height>621</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QFrame" name="frame_3">
+    <property name="geometry">
+     <rect>
+      <x>21</x>
+      <y>69</y>
+      <width>317</width>
+      <height>471</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Raised</enum>
+    </property>
+    <widget class="QTableWidget" name="tableWidget_chat">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>301</width>
+       <height>461</height>
+      </rect>
+     </property>
+     <column>
+      <property name="text">
+       <string>类型</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>名字</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>当前人数</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>最后收发时间</string>
+      </property>
+     </column>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>10</y>
+      <width>351</width>
+      <height>541</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="8,4">
+     <item>
+      <widget class="QFrame" name="frame_bg">
+       <property name="frameShape">
+        <enum>QFrame::Shape::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Shadow::Raised</enum>
+       </property>
+       <widget class="QGroupBox" name="groupBox_chat_window">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>10</y>
+          <width>341</width>
+          <height>341</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>欢迎使用ix聊天器</string>
+        </property>
+        <widget class="QTextEdit" name="textEdit_chat_window">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>30</y>
+           <width>331</width>
+           <height>301</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="frame">
+       <property name="frameShape">
+        <enum>QFrame::Shape::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Shadow::Raised</enum>
+       </property>
+       <widget class="QTextEdit" name="textEdit_text">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>50</y>
+          <width>341</width>
+          <height>101</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_file">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>10</y>
+          <width>91</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>文件</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btn_send">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>10</y>
+          <width>161</width>
+          <height>26</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>发送</string>
+        </property>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="btn_profile">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>88</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>我是头像</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_log_out">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>20</y>
+      <width>88</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>退出登陆</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>715</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

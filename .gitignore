@@ -45,7 +45,9 @@ cmake_install.cmake
 # 图片
 *.png
 *.jpg
-
+#音频
+*.mp3
+*.wav
 # 🐧 Linux 编译文件夹
 build/
 token.txt
